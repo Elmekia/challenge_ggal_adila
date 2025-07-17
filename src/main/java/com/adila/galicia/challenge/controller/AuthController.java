@@ -29,7 +29,7 @@ public class AuthController {
   }
 
   @PostMapping("/login")
-  public ResponseEntity<Map<String,String>> login(@RequestBody AuthRequest request) {
+  public ResponseEntity<Map<String, String>> login(@RequestBody AuthRequest request) {
 
     authenticationManager.authenticate(
         new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())

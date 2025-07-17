@@ -7,30 +7,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.adila.galicia.challenge.dto.request.CreateCartRequest;
 import com.adila.galicia.challenge.dto.request.GetCartsByClientRequest;
-import com.adila.galicia.challenge.entity.Cart;
-import com.adila.galicia.challenge.entity.CartItem;
-import com.adila.galicia.challenge.entity.Product;
-import com.adila.galicia.challenge.entity.User;
-import com.adila.galicia.challenge.repository.CartItemRepository;
-import com.adila.galicia.challenge.repository.CartRepository;
-import com.adila.galicia.challenge.repository.UserRepository;
-import com.adila.galicia.challenge.utils.CartStatus;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.math.BigDecimal;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class CartControllerIntegrationTest {
+@ActiveProfiles("test")
+class CartControllerTest {
 
   @Autowired
   private MockMvc mockMvc;
@@ -38,27 +28,9 @@ class CartControllerIntegrationTest {
   @Autowired
   ObjectMapper objectMapper;
 
-  @Autowired
-  private UserRepository userRepository;
-  @Autowired
-  private CartRepository cartRepository;
-  @Autowired
-  private CartItemRepository cartItemRepository;
-
-  @BeforeAll
-  void setUpOnce() {
-    this.userRepository.deleteAll();
-    User user = User.builder().name("testerUser").role("user").password("asd").build();
-    this.userRepository.save(user);
-    this.cartRepository.save(Cart.builder().user(user).status(CartStatus.OPEN).build());
-    this.cartItemRepository.
-        save(CartItem.builder().cart(Cart.builder().id(1L).build())
-            .product(Product.builder().id(1L).name("algo").price(
-                BigDecimal.valueOf(100)).stock(100).build()).numberOfItems(2).build());
-  }
 
   @Test
-  @WithMockUser(username = "testerUser")
+  @WithMockUser(username = "test_user1")
   void createCartOK() throws Exception {
     CreateCartRequest request = new CreateCartRequest();
     request.setUserId(1L);
@@ -85,7 +57,7 @@ class CartControllerIntegrationTest {
   }
 
   @Test
-  @WithMockUser(username = "testerUser")
+  @WithMockUser(username = "test_user1")
   void getCartByClientOk() throws Exception {
     GetCartsByClientRequest request = new GetCartsByClientRequest();
     request.setUserId(1L);
@@ -97,7 +69,7 @@ class CartControllerIntegrationTest {
   }
 
   @Test
-  @WithMockUser(username = "testerUser")
+  @WithMockUser(username = "test_user1")
   void processCartOK() throws Exception {
     CreateCartRequest request = new CreateCartRequest();
     request.setUserId(1L);
