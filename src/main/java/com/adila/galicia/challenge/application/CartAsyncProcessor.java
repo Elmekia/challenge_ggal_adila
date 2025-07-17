@@ -41,7 +41,7 @@ public class CartAsyncProcessor {
     } catch (Exception e) {
       cart.setStatus(CartStatus.CANCELLED);
       cartService.save(cart);
-      log.info("Cancela por erro al procesar el carrito {}", cartId);
+      log.info("Cancela por error al procesar el carrito {}", cartId);
       return;
     }
     cart.setTotal(this.calculateTotal(cart));
