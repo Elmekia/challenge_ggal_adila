@@ -37,7 +37,7 @@ mvn clean install
 
 ### 3. Ejecuta
 ```bash
-mvn clean install
+mvn spring-boot:run
 ```
 
 
